@@ -1,0 +1,28 @@
+require 'kodoyanpe'
+
+class MyCLI
+  include Mixlib::CLI
+
+  banner "Kodoyanpe builds Chef-full packages for Solaris"
+
+  option :help,
+    :short        => "-h",
+    :long         => "--help",
+    :description  => "Show this message",
+    :on           => :tail,
+    :boolean      => true
+
+  def run(argv=ARGV)
+    begin
+      parse_options
+    rescue OptionParser::MissingArgument, OptionParser::InvalidOption => e
+      puts "#{e}\n"
+      puts "Please run with --help or with no arguments for assistance."
+    end
+  end
+
+end
+
+cli = MyCLI.new
+cli.run
+

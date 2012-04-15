@@ -1,5 +1,13 @@
 Given /^a copy of the kodoyanpe tool$/ do
-  pending # express the regexp above with the code you wish you had
+  project_root = Pathname.new(File.dirname(__FILE__)).parent.parent.expand_path
+  pkg_dir = project_root.join('pkg')
+  rakefile = File.join(project_root, 'Rakefile')
+  built_gems = File.join(pkg_dir, '*.gem')
+  latest = Dir.glob(built_gems).sort {|a, b| File.ctime(a) <=> File.ctime(b) }.last
+  File.exist?(rakefile).should be_true
+  silent_system('rake build').should be_true
+  silent_system("gem install #{latest} --no-ri --no-rdoc").should be_true
+  silent_system("which kodoyanpe").should be_true
 end
 
 When /^I run the command$/ do
