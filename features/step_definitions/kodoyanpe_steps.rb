@@ -10,6 +10,15 @@ Given /^a copy of the kodoyanpe tool$/ do
   silent_system("which kodoyanpe").should be_true
 end
 
+
+When /^I run the command without options$/ do
+  @help_text = %x[kodoyanpe]
+end
+
+Then /^I see some help text$/ do
+  @help_text.include?("Kodoyanpe builds Chef-full packages for Solaris").should be_true
+end
+
 When /^I run the command$/ do
   pending # express the regexp above with the code you wish you had
 end
