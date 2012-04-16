@@ -13,8 +13,9 @@ Background:
 
 
   Scenario: Build Solaris 10 SPARC Package
-    When I run the command
-    And I specify "sparc" as the architecture
-    And I specify "5.10" as the version
+    Given these options:
+      |architecture    | sparc   |
+      |solaris-version | 5.10    |
+    When I run kodoyanpe
     Then I should get a package of the latest Chef client accessible from my workstation
     

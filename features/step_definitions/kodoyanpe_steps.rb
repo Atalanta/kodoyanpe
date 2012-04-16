@@ -19,18 +19,14 @@ Then /^I see some help text$/ do
   @help_text.include?("Kodoyanpe builds Chef-full packages for Solaris").should be_true
 end
 
-When /^I run the command$/ do
-  pending # express the regexp above with the code you wish you had
+Given /^these options:$/ do |table|
+  @options = Hash[*[table.raw]]
 end
 
-When /^I specify "([^"]*)" as the architecture$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
-
-When /^I specify "([^"]*)" as the version$/ do |arg1|
-  pending # express the regexp above with the code you wish you had
+When /^I run kodoyanpe$/ do
+  silent_system("kodoyanpe --arch #{@options["architecture"]} --solaris-release #{@options["solaris-release"]}")
 end
 
 Then /^I should get a package of the latest Chef client accessible from my workstation$/ do
-  pending # express the regexp above with the code you wish you had
+  find_package(@options["architecture"], @options["solaris-version"]).should be_true
 end
