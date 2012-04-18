@@ -1,0 +1,5 @@
+* Kodoyanpe Todo
+** On remote box
+*** Set up ssh user with key
+*** Create /usr/share/zone-templates
+*** Sort out pfexec for user

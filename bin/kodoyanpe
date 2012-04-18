@@ -28,6 +28,8 @@ class MyCLI
     end
   end
   
+  provisioner = Provisioner.new
+  puts provisioner
 end
 
 cli = MyCLI.new
