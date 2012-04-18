@@ -1,0 +1,9 @@
+create -b 
+set zonepath=/usr/share/zones/<%= zonename %>
+set brand=native
+set autoboot=true
+set ip-type=shared
+add net
+set address=<%= zoneip %>
+set physical=e1000g0
+end
