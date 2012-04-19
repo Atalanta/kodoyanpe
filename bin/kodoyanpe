@@ -28,8 +28,8 @@ class MyCLI
     end
   end
   
-  provisioner = Provisioner.new
-  puts provisioner
+#  provisioner = Kodoyanpe::Provisioner.new
+ # provisioner.create_zone("sns", "10.0.0.201")
 end
 
 cli = MyCLI.new

@@ -3,3 +3,11 @@
 *** Set up ssh user with key
 *** Create /usr/share/zone-templates
 *** Sort out pfexec for user
+*** Document template requirement
+*** Sort out subnet for rspec
+** On Kodoyanpe
+*** Some output (that is not seen during test)
+*** Some features about provisioning
+*** Refactor seed methods to use #put_file
+*** Add teardown methods to remove zones created during tests
+*** Test for errors and raise exceptions
