@@ -27,9 +27,11 @@ class MyCLI
       puts "Please run with --help or with no arguments for assistance."
     end
   end
-  
+
+# HACK TEST:  
 #  provisioner = Kodoyanpe::Provisioner.new
- # provisioner.create_zone("sns", "10.0.0.201")
+# provisioner.create_zone("sns", "10.0.0.201")
+
 end
 
 cli = MyCLI.new

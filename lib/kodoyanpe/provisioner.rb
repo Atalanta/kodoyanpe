@@ -3,14 +3,13 @@ require "erb"
 require "tempfile"
 
 module Kodoyanpe
-
   class Provisioner
     
     def initialize
       config_path = File.expand_path("../../../config/kodoyanpe-config.rb", __FILE__)
       Kodoyanpe::Config.from_file(config_path) 
     end
-
+    
     def get_file(host, file)
       tempfile = Tempfile.new('get_file')
       %x[scp #{Config[:ssh_user]}@#{Config[:global_host]}:#{file} #{tempfile.path} 2>/dev/null]
@@ -48,10 +47,10 @@ module Kodoyanpe
         session.exec!(command) do |channel, stream, data|
           result << data
         end
-       end
+      end
       result.join
     end
-
+    
 
 
     def seed_zonecfg(zonename, zoneip)
@@ -92,6 +91,7 @@ module Kodoyanpe
       run_command("/usr/sbin/zoneadm -z #{to} clone #{from}")
     end
 
+
     def start_zone(zonename)
       run_command("/usr/bin/cp /usr/share/zone-templates/sysidcfg /usr/share/zones/#{zonename}/root/etc/sysidcfg")
       run_command("/usr/sbin/zoneadm -z #{zonename} boot")
@@ -107,17 +107,28 @@ module Kodoyanpe
       run_command("/usr/sbin/zoneadm -z #{zonename} reboot")
     end
 
-    def upload_cookbooks(zonename)
+    def upload_cookbooks(zoneip, directory)
+      cookbooks = File.expand_path("../../../cookbooks", __FILE__)
+      %x[scp -r #{cookbooks} #{Config[:ssh_user]}@#{zoneip}:#{directory} 2>/dev/null]
     end
     
-    def run_chef(zonename)
+    def run_chef(zoneip, run_list)
+      puts "Let me get this right, you want me to run chef-solo on #{zoneip}, with the run list at #{run_list}?"
+      result = []
+      Net::SSH.start(zoneip, Config[:ssh_user], :password => Config[:ssh_passwd]) do |session|
+        session.exec!("/usr/bin/chef-solo -j #{run_list}") do |channel, stream, data|
+          result << data
+        end
+      end
+      result
     end
 
+  
     def bootstrap(zonename)
       run_command("/usr/sfw/bin/wget #{Config[:packge_url]} | /usr/bin/bash")
       upload_cookbooks(zonename)
       run_chef(zonename)
     end
   end
-  
 end
+

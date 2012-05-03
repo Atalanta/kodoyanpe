@@ -126,24 +126,36 @@ module Kodoyanpe
     end
 
     describe "#upload_cookbooks" do
-      it "transfers the cookbooks shipped with Kodoyanpe to the remote host"
+      it "transfers the cookbooks shipped with Kodoyanpe to the remote host" do
+        subject.upload_cookbooks(Config[:global_host], "/tmp")
+        subject.run_command("find /tmp -name cookbooks").should match(/cookbooks/)
+        subject.run_command("find /tmp -name cookbooks | xargs ls -l \;").should match(/omnibus-bootstrap/)
+        subject.run_command("rm -rf /tmp/cookbooks")
+      end
     end
 
     describe "#run_chef" do
-      it "runs chef-solo on the remote host" 
+      it "runs chef-solo on the remote host" do
+         Tempfile.open("run_list") do |run_list|
+          run_list.puts '{"run_list": []}'
+          run_list.flush
+          subject.put_file(Config[:global_host], run_list.path, "/tmp/run_list.json")
+        end
+        subject.run_chef(Config[:global_host], "/tmp/run_list.json").should match(/Starting Chef Run/)
+      end 
     end
 
     describe "#bootstrap" do
       it "installs Chef on a zone, and runs chef-solo" 
-      # do
-      #   subject.create_zone("bootstrap", "10.0.0.251")
-      #   subject.clone_zone(Config[:zone_template], "bootstrap")
-      #   subject.start_zone("bootstrap")
-      #   subject.bootstrap("10.0.0.251")
-      #   subject.run_command("chef-client --version").should match(/0.10/)
-      #   subject.run_command("git --version").should match(/1.7/)
-      #   subject.run_command("ruby --version").should match(/1.9/)
-      # end
+      do
+        subject.create_zone("bootstrap", "10.0.0.251")
+        subject.clone_zone(Config[:zone_template], "bootstrap")
+        subject.start_zone("bootstrap")
+        subject.bootstrap("10.0.0.251")
+        subject.run_command("chef-client --version").should match(/0.10/)
+        subject.run_command("git --version").should match(/1.7/)
+        subject.run_command("ruby --version").should match(/1.9/)
+      end
     end
   end
 end

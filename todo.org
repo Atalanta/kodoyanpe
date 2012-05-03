@@ -1,13 +1,20 @@
 * Kodoyanpe Todo
 ** On remote box
-*** Set up ssh user with key
-*** Create /usr/share/zone-templates
-*** Sort out pfexec for user
-*** Document template requirement
-*** Sort out subnet for rspec
+*** knife boostrap
+**** Set up ssh user with key
+- root?
+- omnibus + pfexec?
+**** Create zfs dataset for /usr/share/zones
+**** Set to 0700
+**** Create /usr/share/zone-templates
+**** Provide template?
+**** Allocate IPs for testing
+- subnet + firewall?
+- some IPs?
 ** On Kodoyanpe
 *** Some output (that is not seen during test)
 *** Some features about provisioning
 *** Refactor seed methods to use #put_file
 *** Add teardown methods to remove zones created during tests
 *** Test for errors and raise exceptions
+*** Look at coupling between bootstrap and run_chef methods
